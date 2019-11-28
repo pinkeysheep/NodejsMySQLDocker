@@ -1,0 +1,22 @@
+version: "3"
+services:
+  web:
+    build: .
+    depends_on:
+      - db
+    container_name: nodejs
+    ports:
+      - 80:3000
+  db:
+    environment:
+      MYSQL_USER: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_DATABASE: my-nodeapp-db
+    image: mysql:5.7.28
+    container_name: db_mysql
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/db/sql:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
